@@ -1,0 +1,76 @@
+#include "transcode_data.h"
+
+<%
+  require "emoji-docomo-tbl"
+  require "emoji-au-tbl"
+  require "emoji-softbank-tbl"
+
+  transcode_tblgen "Shift_JIS-DoCoMo", "UTF-8-DoCoMo",
+  [["{00-7f}", :nomap]] +
+  DOCOMO_SJIS_TO_UCS_TBL +
+  citrus_decode_mapsrc("mskanji", 1, "JISX0201-KANA/UCS") +
+  citrus_decode_mapsrc("mskanji", 2, "JISX0208:1990/UCS")
+
+  transcode_tblgen "UTF-8-DoCoMo", "Shift_JIS-DoCoMo",
+  [["{00-7f}", :nomap]] +
+  DOCOMO_UCS_TO_SJIS_TBL +
+  citrus_decode_mapsrc("mskanji", 1, "UCS/JISX0201-KANA") +
+  citrus_decode_mapsrc("mskanji", 2, "UCS/JISX0208:1990")
+
+
+  transcode_tblgen "Shift_JIS-au", "UTF-8-au",
+  [["{00-7f}", :nomap]] +
+  AU_SJIS_TO_UCS_TBL +
+  citrus_decode_mapsrc("mskanji", 1, "JISX0201-KANA/UCS") +
+  citrus_decode_mapsrc("mskanji", 2, "JISX0208:1990/UCS")
+
+  transcode_tblgen "UTF-8-au", "Shift_JIS-au",
+  [["{00-7f}", :nomap]] +
+  AU_UCS_TO_SJIS_TBL +
+  citrus_decode_mapsrc("mskanji", 1, "UCS/JISX0201-KANA") +
+  citrus_decode_mapsrc("mskanji", 2, "UCS/JISX0208:1990")
+
+
+  transcode_tblgen "Shift_JIS-au", "UTF-8-au-auto",
+  [["{00-7f}", :nomap]] +
+  AU_SJIS_TO_UCSAUTO_TBL +
+  citrus_decode_mapsrc("mskanji", 1, "JISX0201-KANA/UCS") +
+  citrus_decode_mapsrc("mskanji", 2, "JISX0208:1990/UCS")
+
+  transcode_tblgen "UTF-8-au-auto", "Shift_JIS-au",
+  [["{00-7f}", :nomap]] +
+  AU_UCSAUTO_TO_SJIS_TBL +
+  citrus_decode_mapsrc("mskanji", 1, "UCS/JISX0201-KANA") +
+  citrus_decode_mapsrc("mskanji", 2, "UCS/JISX0208:1990")
+
+
+  transcode_tblgen "Shift_JIS-SoftBank", "UTF-8-SoftBank",
+  [["{00-7f}", :nomap]] +
+  SOFTBANK_SJIS_TO_UCS_TBL +
+  citrus_decode_mapsrc("mskanji", 1, "JISX0201-KANA/UCS") +
+  citrus_decode_mapsrc("mskanji", 2, "JISX0208:1990/UCS")
+
+  transcode_tblgen "UTF-8-SoftBank", "Shift_JIS-SoftBank",
+  [["{00-7f}", :nomap]] +
+  SOFTBANK_UCS_TO_SJIS_TBL +
+  citrus_decode_mapsrc("mskanji", 1, "UCS/JISX0201-KANA") +
+  citrus_decode_mapsrc("mskanji", 2, "UCS/JISX0208:1990")
+%>
+
+<%= transcode_generated_code %>
+
+void
+Init_emoji(void)
+{
+  rb_enc_replicate("Shift_JIS-au", rb_enc_find("Shift_JIS"));
+  rb_enc_replicate("UTF-8-au", rb_enc_find("UTF-8"));
+  rb_enc_replicate("UTF-8-au-auto", rb_enc_find("UTF-8"));
+
+  rb_enc_replicate("Shift_JIS-DoCoMo", rb_enc_find("Shift_JIS"));
+  rb_enc_replicate("UTF-8-DoCoMo", rb_enc_find("UTF-8"));
+
+  rb_enc_replicate("Shift_JIS-SoftBank", rb_enc_find("Shift_JIS"));
+  rb_enc_replicate("UTF-8-SoftBank", rb_enc_find("UTF-8"));
+
+<%= transcode_register_code %>
+}
